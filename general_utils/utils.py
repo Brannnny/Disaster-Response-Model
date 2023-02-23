@@ -72,7 +72,7 @@ def save_data(df, database_file_name):
     database_file_name str: File path of SQL Database into which the cleaned\
     data is to be saved
 
-    Returns:
+    Returns:+
     None
     """
 
