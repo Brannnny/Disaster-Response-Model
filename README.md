@@ -15,6 +15,6 @@ Used Data Engineering framework for data transformation, built machine learning 
 - Scikit Learn  
 
 ## Cloud Services
-- AWS and GCP
+- AWS and GCP                                
 
 
