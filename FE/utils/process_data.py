@@ -45,8 +45,7 @@ class TransformData:
         """
 
         # Split categories into separate category columns
-        categories = df['categories'].str.split(";", \
-                                                expand=True)
+        categories = df['categories'].str.split(";", expand=True)
 
         # select the first row of the categories dataframe
         row = categories.iloc[0, :].values

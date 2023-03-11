@@ -83,7 +83,40 @@ def save_data(df, database_file_name):
     df.to_sql(table_name, engine, index=False, if_exists='replace')
 
 
-# mongodb
+class ReadWriteMongoDB:
+    @classmethod
+    def create_conn_string(cls, username, password):
+        CONNECTION_STRING = f'mongodb+srv://{username}:{password}@cluster0.esojqnv.mongodb.net'
+        return cls(CONNECTION_STRING)
+
+    def __init__(self, conn_string):
+        self.client = MongoClient(conn_string)
+
+    def __str__(self):
+        if results.acknowledged:
+            return f"{self.dic} written to MongoDB, Database Name: {self.db_name}, Table: {self.collection_name} successfully"
+        return "Error"
+
+    def create_database(self, db_name):
+        return self.client[db_name]
+
+    def create_collection(self, db_name, collection_name):
+        self.db_name = db_name
+        self.collection_name = collection_name
+        try:
+            self.db = self.create_database(db_name)
+            self.db.create_collection(collection_name)
+            print()
+        except:
+            print(f'collection {collection_name} already exists')
+            self.db = self.client[db_name][collection_name]
+
+    def insert_data(self, dic):
+        self.dic = dic
+        self.results = self.db.insert_one(dic)
+
+    def read_data(self):
+        pass
 
 
 if __name__ == "__main__":
