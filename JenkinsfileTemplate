@@ -1,0 +1,77 @@
+CODE_CHANGES = gitGetChanges()
+pipeline {
+    agent any
+
+    parameters {
+        string(name: "VERSION", defaultValue: "", description: "version to deploy on prod")
+                or
+        choice(name: "VERSION", choices:[1.2.1, 1.3.4, 1.0.0], description: ""])
+                or
+        booleanParam(name: "executeTest", defaultValue: true, description: "" )
+
+    }
+
+    environment { # this is how to declare your own environment variables
+        VERSION_NAME = '1.1.0'
+        SERVER_CREDENTIAL = credentials("userid") # install credentials plugins to be able to use this
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: '*/dev']], extensions: [], userRemoteConfigs: [[credentialsId: 'ObjDetctionSegmentation', url: 'https://github.com/omolewadavids/Object_Detection_and_Segmentation.git']]])
+            }
+        }
+        stage('Build') {
+            when {
+                expression {
+                    BRANCH_NAME == 'dev' && CODE_CHANGES == True ## BRANCH_NAME is environmental variables in Jenkins: get all the list from https://d1a1-24-131-50-176.ngrok.io/env-vars.html/
+                }
+            }
+            steps{
+                git branch: 'dev', credentialsId: 'ObjDetctionSegmentation', url: 'https://github.com/omolewadavids/Object_Detection_and_Segmentation.git'
+                echo "The version we are building is {VERSION_NAME}" # This is how to implement your own environment variable you created
+            }
+        }
+        stage('Test') {
+            when {
+                expression {
+                    BRANCH_NAME == 'dev' || BRANCH_NAME == 'master'
+                }
+            }
+            steps{
+                echo 'Done building and checking for the filex'
+                echo 'Omolewa'
+                ### other way to user credential env variable #####
+                withCredentials([
+                    usernamePassword(credentials: 'usernameID', usernameVariable: USER, passwordVariable: PWD)
+                ]) {
+                    sh 'some script here {USER} {PWD}'
+                }
+            }
+        }
+        stage('Deploy') {
+            ###### how to use the parameters #########
+            when {
+                expression {
+                    params.executeTest == true
+                }
+            }
+            steps{
+                echo 'Done building and checking for the filex'
+                echo 'Omolewa'
+            }
+        }
+    }
+
+    post {
+       always {
+
+       }
+       success {
+
+       }
+       failure {
+
+       }
+    }
+}
