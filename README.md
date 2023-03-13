@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Used Data Engineering framework for data transformation purposes; built machine learning model, and created API for proper Disaster response routing. Emergency calls are channeled to the appropriate agencies.
+Used Data Engineering framework for data transformation purposes; built machine learning model, and created API for proper Disaster response routing. Ensures emergency calls are channeled to the appropriate agencies.
 
 
 ## Databases
