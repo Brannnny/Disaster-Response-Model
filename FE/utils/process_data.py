@@ -109,34 +109,38 @@ def save_data(self, df, database_file_name):
     table_name = db_file_name.split(".")[0]
     df.to_sql(table_name, engine, index=False, if_exists='replace')
 
+import click
 
-def main():
-    if len(sys.argv) == 4:
-
-        messages_filepath, categories_filepath, database_filepath = sys.argv[1:]
-
-        print('Loading data...\n    MESSAGES: {}\n    CATEGORIES: {}'
-              .format(messages_filepath, categories_filepath))
-        transform_data = TransformData()
-
-        df = TransformData(.fit_transform(messages_filename=)
+@click.command()
+@click.option('--mess_path', default=1, help='Number of greetings.')
+@click.option('--cat_path', prompt='Your name',
+              help='The person to greet.')
+@click.option("--db_path", default=1, help='Number of greetings.')
+def main(mess_path, cat_path, db_path):
 
 
-        print('Cleaning data...')
+    print('Loading data...\n    MESSAGES: {}\n    CATEGORIES: {}'
+          .format(mess_path, cat_path))
+    transform_data = TransformData()
+
+    df = TransformData.fit_transform(messages_filename=)
 
 
-        print('Saving data...\n    DATABASE: {}'.format(database_filepath))
-        save_data(df, database_filepath)
+    print('Cleaning data...')
 
-        print('Cleaned data saved to database!')
 
-    else:
-        print('Please provide the filepaths of the messages and categories ' \
-              'datasets as the first and second argument respectively, as ' \
-              'well as the filepath of the database to save the cleaned data ' \
-              'to as the third argument. \n\nExample: python process_data.py ' \
-              'disaster_messages.csv disaster_categories.csv ' \
-              'DisasterResponse.db')
+    print('Saving data...\n    DATABASE: {}'.format(db_path))
+    save_data(df, db_path)
+
+    print('Cleaned data saved to database!')
+
+    # else:
+    #     print('Please provide the filepaths of the messages and categories ' \
+    #           'datasets as the first and second argument respectively, as ' \
+    #           'well as the filepath of the database to save the cleaned data ' \
+    #           'to as the third argument. \n\nExample: python process_data.py ' \
+    #           'disaster_messages.csv disaster_categories.csv ' \
+    #           'DisasterResponse.db')
 
 
 # run
